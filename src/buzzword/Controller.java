@@ -1,4 +1,4 @@
-package sample;
+package buzzword;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,21 +13,16 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.awt.*;
 import java.io.IOException;
-import java.util.Observer;
 
 /*
 @author Feazan Yaseen
 */
 
 public class Controller {
-    @FXML
-    private TextField theUser;
-    @FXML
-    private TextField settingUser;
-    @FXML
-    public ChoiceBox modeChoices = new ChoiceBox();
+    @FXML private TextField settingUser;
+    @FXML public ChoiceBox modeChoices = new ChoiceBox();
+
     ObservableList<String> gameModeList = FXCollections.observableArrayList("English Dictionary", "Places", "Famous People");
 
     @FXML
@@ -51,6 +46,8 @@ public class Controller {
         loginStage.setScene(mainScene);
         loginStage.show();
     }
+
+
 
     @FXML
     public void loginAfterCreate (ActionEvent event) throws IOException

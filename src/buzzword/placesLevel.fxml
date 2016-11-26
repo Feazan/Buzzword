@@ -9,11 +9,11 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="625.0" prefWidth="1053.0" xmlns="http://javafx.com/javafx/8.0.112-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="625.0" prefWidth="1053.0" xmlns="http://javafx.com/javafx/8.0.112-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="buzzword.Controller">
     <left>
         <FlowPane columnHalignment="CENTER" hgap="20.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #3A3276;" vgap="50.0" BorderPane.alignment="CENTER">
             <children>
-                <TextField fx:id="settingUser" editable="false" />
+                <TextField fx:id="settingUser" />
                 <Button fx:id="homeBTN" mnemonicParsing="false" onAction="#returnToHome" style="-fx-background-color: #5B5393;" text="Home" textFill="#c6bfff" />
             </children>
             <padding>
@@ -45,19 +45,19 @@
                         <Circle fill="#5b5393" layoutX="469.0" layoutY="326.0" radius="50.0" stroke="#c6bfff" strokeType="INSIDE" />
                         <Circle fill="#5b5393" layoutX="596.0" layoutY="326.0" radius="50.0" stroke="#c6bfff" strokeType="INSIDE" />
                         <Circle fill="#5b5393" layoutX="342.0" layoutY="326.0" radius="50.0" stroke="#c6bfff" strokeType="INSIDE" />
-                        <Button disable="true" layoutX="579.0" layoutY="186.0" mnemonicParsing="false" style="-fx-background-color: #211959;" text="4" textFill="#c6bfff" />
-                        <Button disable="true" layoutX="579.0" layoutY="307.0" mnemonicParsing="false" style="-fx-background-color: #211959;" text="8" textFill="#c6bfff" />
-                        <Button disable="true" layoutX="452.0" layoutY="307.0" mnemonicParsing="false" style="-fx-background-color: #211959;" text="7" textFill="#c6bfff" />
-                        <Button disable="true" layoutX="325.0" layoutY="307.0" mnemonicParsing="false" style="-fx-background-color: #211959;" text="6" textFill="#c6bfff" />
-                        <Button disable="true" layoutX="195.0" layoutY="307.0" mnemonicParsing="false" style="-fx-background-color: #211959;" text="5" textFill="#c6bfff" />
-                        <Button disable="true" layoutX="452.0" layoutY="186.0" mnemonicParsing="false" style="-fx-background-color: #211959;" text="3" textFill="#c6bfff" />
-                        <Button disable="true" layoutX="325.0" layoutY="186.0" mnemonicParsing="false" style="-fx-background-color: #211959;" text="2" textFill="#c6bfff" />
-                        <Button layoutX="195.0" layoutY="186.0" mnemonicParsing="false" onAction="#play" style="-fx-background-color: #211959;" text="1" textFill="#c6bfff" />
-                        <TextField layoutX="168.0" layoutY="43.0" prefHeight="102.0" prefWidth="448.0" style="-fx-background-color: #0E083B; -fx-text-fill: #c6bfff;" text="English Dictionary">
-                            <font>
-                                <Font name="Yu Gothic UI Regular" size="48.0" />
-                            </font></TextField>
-                  <Button layoutX="753.0" layoutY="4.0" mnemonicParsing="false" onAction="#closeProgram" style="-fx-background-color: #5B5393;" text="X" textFill="#c6bfff" fx:id="xBTN" />
+                  <Button disable="true" layoutX="579.0" layoutY="186.0" mnemonicParsing="false" style="-fx-background-color: #211959;" text="4" textFill="#c6bfff" />
+                  <Button disable="true" layoutX="579.0" layoutY="307.0" mnemonicParsing="false" style="-fx-background-color: #211959;" text="8" textFill="#c6bfff" />
+                  <Button disable="true" layoutX="452.0" layoutY="307.0" mnemonicParsing="false" style="-fx-background-color: #211959;" text="7" textFill="#c6bfff" />
+                  <Button disable="true" layoutX="325.0" layoutY="307.0" mnemonicParsing="false" style="-fx-background-color: #211959;" text="6" textFill="#c6bfff" />
+                  <Button disable="true" layoutX="195.0" layoutY="307.0" mnemonicParsing="false" style="-fx-background-color: #211959;" text="5" textFill="#c6bfff" />
+                  <Button layoutX="452.0" layoutY="186.0" mnemonicParsing="false" onAction="#play" style="-fx-background-color: #211959;" text="3" textFill="#c6bfff" />
+                  <Button layoutX="325.0" layoutY="186.0" mnemonicParsing="false" onAction="#play" style="-fx-background-color: #211959;" text="2" textFill="#c6bfff" />
+                  <Button layoutX="195.0" layoutY="186.0" mnemonicParsing="false" onAction="#play" style="-fx-background-color: #211959;" text="1" textFill="#c6bfff" />
+                  <TextField layoutX="324.0" layoutY="39.0" prefHeight="102.0" prefWidth="191.0" style="-fx-background-color: #0E083B; -fx-text-fill: #c6bfff;" text="Places">
+                     <font>
+                        <Font name="Yu Gothic UI Regular" size="48.0" />
+                     </font></TextField>
+                  <Button layoutX="759.0" mnemonicParsing="false" onAction="#closeProgram" style="-fx-background-color: #5B5393;" text="X" textFill="#c6bfff" fx:id="xBTN" />
                     </children>
                 </Pane>
             </children>

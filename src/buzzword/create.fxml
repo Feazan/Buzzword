@@ -11,18 +11,18 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="625.0" prefWidth="1053.0" xmlns="http://javafx.com/javafx/8.0.112-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="625.0" prefWidth="1053.0" xmlns="http://javafx.com/javafx/8.0.112-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="buzzword.CreateProfileController">
     <left>
         <FlowPane columnHalignment="CENTER" hgap="20.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #3A3276;" vgap="50.0" BorderPane.alignment="CENTER">
             <children>
-                <TextField fx:id="theUser" promptText="Create Username" />
-                <PasswordField promptText="Create Password" />
-                <PasswordField promptText="Confirm Password">
+                <TextField fx:id="createProfileUsername" promptText="Create Username" />
+                <PasswordField fx:id="createProfilePassword" promptText="Create Password" />
+                <PasswordField fx:id="createProfileConfirmPassword" promptText="Confirm Password">
                     <FlowPane.margin>
                         <Insets top="-50.0" />
                     </FlowPane.margin>
                 </PasswordField>
-                <Button fx:id="createBtn" mnemonicParsing="false" onAction="#login" style="-fx-background-color: #5B5393;" text="Create" textFill="#c6bfff" />
+                <Button fx:id="createBtn" mnemonicParsing="false" onAction="#submitCreateNewProfile" style="-fx-background-color: #5B5393;" text="Create" textFill="#c6bfff" />
             </children>
             <padding>
                 <Insets left="10.0" top="200.0" />
