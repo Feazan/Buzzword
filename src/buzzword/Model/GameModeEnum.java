@@ -1,11 +1,11 @@
-package buzzword;
+package buzzword.Model;
 
 /**
  * Created by Feazan on 11/26/2016.
  */
 public enum GameModeEnum {
     ANIMAL("Animals"),
-    COLORS("Colors"),
+    DICTIONARY("English Dictionary"),
     SPORTSTEAMS("Sports Teams");
 
     private String name;

@@ -1,5 +1,6 @@
-package buzzword;
+package buzzword.Controller;
 
+import buzzword.Model.AppContext;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,12 +23,13 @@ import java.io.IOException;
 public class Controller {
     @FXML private TextField settingUser;
     @FXML public ChoiceBox modeChoices = new ChoiceBox();
-    ObservableList<String> gameModeList = FXCollections.observableArrayList("Animals", "Colors", "Sports Teams");
+    ObservableList<String> gameModeList = FXCollections.observableArrayList("Animals", "English Dictionary", "Sports Teams");
 
     protected void goToScene(String sceneToLoad, Stage currentStage) throws IOException
     {
         Parent gameScreen = FXMLLoader.load(getClass().getResource(sceneToLoad));
         Scene mainScene = new Scene(gameScreen);
+        AppContext.getSingleton().setCurrentScene(mainScene);
         currentStage.setScene(mainScene);
         currentStage.setFullScreen(true);
         currentStage.show();
@@ -38,7 +40,7 @@ public class Controller {
     {
         //TODO save current game status
         AppContext.getSingleton().resetContext();
-        goToScene("sample.fxml", (Stage) ((Node) event.getSource()).getScene().getWindow());
+        goToScene("../sample.fxml", (Stage) ((Node) event.getSource()).getScene().getWindow());
     }
 
     @FXML
@@ -46,14 +48,14 @@ public class Controller {
     {
         System.out.println("Login Pressed");
         Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        goToScene("login.fxml", currentStage);
+        goToScene("../login.fxml", currentStage);
     }
 
     @FXML
     public void createProfile (ActionEvent event) throws IOException
     {
         System.out.println("Create Profile Pressed");
-        Parent gameScreen = FXMLLoader.load(getClass().getResource("create.fxml"));
+        Parent gameScreen = FXMLLoader.load(getClass().getResource("../create.fxml"));
         Scene mainScene = new Scene(gameScreen);
         Stage loginStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         loginStage.setScene(mainScene);
@@ -64,7 +66,7 @@ public class Controller {
     public void loginAfterCreate (ActionEvent event) throws IOException
     {
         System.out.println("Logging in after Created Profile");
-        Parent gameScreen = FXMLLoader.load(getClass().getResource("game.fxml"));
+        Parent gameScreen = FXMLLoader.load(getClass().getResource("modeSelector.fxml"));
         Scene mainScene = new Scene(gameScreen);
         Stage loginStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         loginStage.setScene(mainScene);
@@ -75,7 +77,7 @@ public class Controller {
     public void returnToHome (ActionEvent event) throws IOException
     {
         System.out.println("Returning to Home");
-        Parent gameScreen = FXMLLoader.load(getClass().getResource("sample.fxml"));
+        Parent gameScreen = FXMLLoader.load(getClass().getResource("../sample.fxml"));
         Scene mainScene = new Scene(gameScreen);
         Stage loginStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         loginStage.setScene(mainScene);
@@ -85,38 +87,8 @@ public class Controller {
     @FXML
     public void initialize()
     {
-        modeChoices.setValue("English Dictionary");
+        modeChoices.setValue("Animals");
         modeChoices.setItems(gameModeList);
-    }
-
-    @FXML
-    public void levelSelection (ActionEvent event) throws IOException
-    {
-        System.out.println("Playing Game...");
-
-        // THIS IS WHAT MODE THE USER WANTS
-        System.out.println(modeChoices.getValue());
-
-        if(modeChoices.getValue().equals("Animals"))
-        {
-
-        }
-        else if(modeChoices.getValue().equals("Colors"))
-        {
-            Parent gameScreen = FXMLLoader.load(getClass().getResource("famousPeopleLevel.fxml"));
-            Scene mainScene = new Scene(gameScreen);
-            Stage loginStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            loginStage.setScene(mainScene);
-            loginStage.show();
-        }
-        else
-        {
-            Parent gameScreen = FXMLLoader.load(getClass().getResource("levelSelector.fxml"));
-            Scene mainScene = new Scene(gameScreen);
-            Stage loginStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            loginStage.setScene(mainScene);
-            loginStage.show();
-        }
     }
 
     public void handlePlayButton (ActionEvent event)
@@ -135,7 +107,7 @@ public class Controller {
     public void play(ActionEvent event) throws IOException
     {
         System.out.println("Playing Pressed");
-        Parent gameScreen = FXMLLoader.load(getClass().getResource("playing.fxml"));
+        Parent gameScreen = FXMLLoader.load(getClass().getResource("../playing.fxml"));
         Scene mainScene = new Scene(gameScreen);
         Stage loginStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         loginStage.setScene(mainScene);

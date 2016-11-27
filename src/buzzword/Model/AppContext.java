@@ -1,4 +1,6 @@
-package buzzword;
+package buzzword.Model;
+
+import javafx.scene.Scene;
 
 /**
  * Created by Feazan on 11/26/2016.
@@ -7,6 +9,16 @@ public class AppContext {
     static AppContext singleton;
     ProfileManager profileManager;
     UserProfile currentUser;
+    GameState gameState;
+    Scene currentScene;
+
+    public Scene getCurrentScene() {
+        return currentScene;
+    }
+
+    public void setCurrentScene(Scene currentScene) {
+        this.currentScene = currentScene;
+    }
 
     public UserProfile getCurrentUser() {
         return currentUser;
@@ -16,8 +28,14 @@ public class AppContext {
         this.currentUser = currentUser;
     }
 
+    public GameState getGameState() {
+        return gameState;
+    }
+
     private AppContext() {
         this.profileManager = new ProfileManager();
+        this.gameState = new GameState();
+
     }
 
     public static AppContext getSingleton() {
@@ -34,6 +52,8 @@ public class AppContext {
     {
         this.setCurrentUser(null);
     }
+
+
 
 
 

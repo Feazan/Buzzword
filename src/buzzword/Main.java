@@ -1,11 +1,11 @@
 package buzzword;
 
+import buzzword.Model.AppContext;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import sun.security.krb5.internal.APOptions;
 
 /*
 @author Feazan Yaseen

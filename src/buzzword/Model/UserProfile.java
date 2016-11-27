@@ -1,4 +1,4 @@
-package buzzword;
+package buzzword.Model;
 
 /**
  * Created by Feazan on 11/26/2016.
@@ -6,6 +6,15 @@ package buzzword;
 public class UserProfile {
     private String userName;
     private String hashedPassword;
+    private int level = 1;
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
 
     public String getUserName() {
         return userName;
@@ -22,4 +31,6 @@ public class UserProfile {
     public void setHashedPassword(String hashedPassword) {
         this.hashedPassword = hashedPassword;
     }
+
+
 }

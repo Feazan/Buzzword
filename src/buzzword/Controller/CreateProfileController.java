@@ -1,5 +1,7 @@
-package buzzword;
+package buzzword.Controller;
 
+import buzzword.Model.AppContext;
+import buzzword.Model.ProfileManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -59,7 +61,7 @@ public class CreateProfileController extends Controller {
         }
         profileManager.createNewProfile(userName,password);
         System.out.println("Login Pressed");
-        Parent gameScreen = FXMLLoader.load(getClass().getResource("login.fxml"));
+        Parent gameScreen = FXMLLoader.load(getClass().getResource("../login.fxml"));
         Scene mainScene = new Scene(gameScreen);
         Stage loginStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         loginStage.setScene(mainScene);

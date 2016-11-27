@@ -9,7 +9,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="625.0" prefWidth="1053.0" xmlns="http://javafx.com/javafx/8.0.112-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="buzzword.Controller">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="625.0" prefWidth="1053.0" xmlns="http://javafx.com/javafx/8.0.112-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="buzzword.Controller.LevelSelectorController">
     <left>
         <FlowPane columnHalignment="CENTER" hgap="20.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #3A3276;" vgap="50.0" BorderPane.alignment="CENTER">
             <children>
@@ -54,7 +54,7 @@
                         <Button disable="true" layoutX="452.0" layoutY="186.0" mnemonicParsing="false" style="-fx-background-color: #211959;" text="3" textFill="#c6bfff" />
                         <Button disable="true" layoutX="325.0" layoutY="186.0" mnemonicParsing="false" style="-fx-background-color: #211959;" text="2" textFill="#c6bfff" />
                         <Button layoutX="195.0" layoutY="186.0" mnemonicParsing="false" onAction="#play" style="-fx-background-color: #211959;" text="1" textFill="#c6bfff" />
-                        <TextField layoutX="168.0" layoutY="43.0" prefHeight="102.0" prefWidth="448.0" style="-fx-background-color: #0E083B; -fx-text-fill: #c6bfff;" text="English Dictionary">
+                        <TextField fx:id="modeLabel" layoutX="168.0" layoutY="43.0" prefHeight="102.0" prefWidth="448.0" style="-fx-background-color: #0E083B; -fx-text-fill: #c6bfff;">
                             <font>
                                 <Font name="Yu Gothic UI Regular" size="48.0" />
                             </font></TextField>

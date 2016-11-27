@@ -1,5 +1,8 @@
-package buzzword;
+package buzzword.Controller;
 
+import buzzword.Model.AppContext;
+import buzzword.Model.ProfileManager;
+import buzzword.Model.UserProfile;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -28,7 +31,7 @@ public class LoginController extends Controller
             System.out.println("Login Successful");
             UserProfile currentUser = profileManager.getUserProfile(userName);
             AppContext.getSingleton().setCurrentUser(currentUser);
-            goToScene("game.fxml", (Stage) ((Node) event.getSource()).getScene().getWindow());
+            goToScene("../modeSelector.fxml", (Stage) ((Node) event.getSource()).getScene().getWindow());
         }
         else
         {
