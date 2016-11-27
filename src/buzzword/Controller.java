@@ -22,8 +22,32 @@ import java.io.IOException;
 public class Controller {
     @FXML private TextField settingUser;
     @FXML public ChoiceBox modeChoices = new ChoiceBox();
+    ObservableList<String> gameModeList = FXCollections.observableArrayList("Animals", "Colors", "Sports Teams");
 
-    ObservableList<String> gameModeList = FXCollections.observableArrayList("English Dictionary", "Places", "Famous People");
+    protected void goToScene(String sceneToLoad, Stage currentStage) throws IOException
+    {
+        Parent gameScreen = FXMLLoader.load(getClass().getResource(sceneToLoad));
+        Scene mainScene = new Scene(gameScreen);
+        currentStage.setScene(mainScene);
+        currentStage.setFullScreen(true);
+        currentStage.show();
+    }
+
+    @FXML
+    public void handleLogout(ActionEvent event) throws IOException
+    {
+        //TODO save current game status
+        AppContext.getSingleton().resetContext();
+        goToScene("sample.fxml", (Stage) ((Node) event.getSource()).getScene().getWindow());
+    }
+
+    @FXML
+    public void handleGoToLoginScreen (ActionEvent event) throws IOException
+    {
+        System.out.println("Login Pressed");
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        goToScene("login.fxml", currentStage);
+    }
 
     @FXML
     public void createProfile (ActionEvent event) throws IOException
@@ -35,19 +59,6 @@ public class Controller {
         loginStage.setScene(mainScene);
         loginStage.show();
     }
-
-    @FXML
-    public void login (ActionEvent event) throws IOException
-    {
-        System.out.println("Login Pressed");
-        Parent gameScreen = FXMLLoader.load(getClass().getResource("login.fxml"));
-        Scene mainScene = new Scene(gameScreen);
-        Stage loginStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        loginStage.setScene(mainScene);
-        loginStage.show();
-    }
-
-
 
     @FXML
     public void loginAfterCreate (ActionEvent event) throws IOException
@@ -86,15 +97,11 @@ public class Controller {
         // THIS IS WHAT MODE THE USER WANTS
         System.out.println(modeChoices.getValue());
 
-        if(modeChoices.getValue().equals("Places"))
+        if(modeChoices.getValue().equals("Animals"))
         {
-            Parent gameScreen = FXMLLoader.load(getClass().getResource("placesLevel.fxml"));
-            Scene mainScene = new Scene(gameScreen);
-            Stage loginStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            loginStage.setScene(mainScene);
-            loginStage.show();
+
         }
-        else if(modeChoices.getValue().equals("Famous People"))
+        else if(modeChoices.getValue().equals("Colors"))
         {
             Parent gameScreen = FXMLLoader.load(getClass().getResource("famousPeopleLevel.fxml"));
             Scene mainScene = new Scene(gameScreen);
@@ -104,7 +111,7 @@ public class Controller {
         }
         else
         {
-            Parent gameScreen = FXMLLoader.load(getClass().getResource("englishDictionaryLevel.fxml"));
+            Parent gameScreen = FXMLLoader.load(getClass().getResource("levelSelector.fxml"));
             Scene mainScene = new Scene(gameScreen);
             Stage loginStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             loginStage.setScene(mainScene);

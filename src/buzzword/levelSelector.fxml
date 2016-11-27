@@ -13,6 +13,7 @@
     <left>
         <FlowPane columnHalignment="CENTER" hgap="20.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #3A3276;" vgap="50.0" BorderPane.alignment="CENTER">
             <children>
+            <Button mnemonicParsing="false" onAction="#handleLogout" text="Logout" />
                 <TextField fx:id="settingUser" editable="false" />
                 <Button fx:id="homeBTN" mnemonicParsing="false" onAction="#returnToHome" style="-fx-background-color: #5B5393;" text="Home" textFill="#c6bfff" />
             </children>

@@ -6,6 +6,15 @@ package buzzword;
 public class AppContext {
     static AppContext singleton;
     ProfileManager profileManager;
+    UserProfile currentUser;
+
+    public UserProfile getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(UserProfile currentUser) {
+        this.currentUser = currentUser;
+    }
 
     private AppContext() {
         this.profileManager = new ProfileManager();
@@ -20,5 +29,13 @@ public class AppContext {
     public ProfileManager getProfileManager() {
         return profileManager;
     }
+
+    public void resetContext()
+    {
+        this.setCurrentUser(null);
+    }
+
+
+
 }
 

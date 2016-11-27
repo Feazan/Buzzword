@@ -45,8 +45,31 @@ public class ProfileManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    public boolean verifyUserLogin(String username, String plainTextPassword)
+    {
+        if(userProfileMap.containsKey(username))
+        {
+            UserProfile profileToCheck = userProfileMap.get(username);
+            String testPassword = null;
+            try {
+                testPassword = encryptedPassword(plainTextPassword);
+            } catch (NoSuchAlgorithmException e) {
+                System.out.println("Failed to hash password");
+                return false;
+            }
+            return (testPassword.equals(profileToCheck.getHashedPassword()));
+        }
+        else
+        {
+            return false;
+        }
+    }
 
+    public UserProfile getUserProfile(String username)
+    {
+        return userProfileMap.get(username);
     }
 
     /**
