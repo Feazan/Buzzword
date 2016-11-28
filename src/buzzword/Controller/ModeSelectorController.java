@@ -21,21 +21,32 @@ public class ModeSelectorController extends Controller {
         // THIS IS WHAT MODE THE USER WANTS
         System.out.println(modeChoices.getValue());
 
+        // Clear out the dictionary
+        AppContext.getSingleton().getGameState().getDictionary().clear();
+
+        GameModeEnum gameModeEnum;
         if(modeChoices.getValue().equals("Animals"))
         {
-            GameModeEnum gameModeEnum = GameModeEnum.ANIMAL;
+            gameModeEnum = GameModeEnum.ANIMAL;
             AppContext.getSingleton().getGameState().setGameMode(gameModeEnum);
+
         }
         else if(modeChoices.getValue().equals("English Dictionary"))
         {
-            GameModeEnum gameModeEnum = GameModeEnum.DICTIONARY;
+            gameModeEnum = GameModeEnum.DICTIONARY;
             AppContext.getSingleton().getGameState().setGameMode(gameModeEnum);
         }
         else
         {
-            GameModeEnum gameModeEnum = GameModeEnum.SPORTSTEAMS;
+            gameModeEnum = GameModeEnum.SPORTSTEAMS;
             AppContext.getSingleton().getGameState().setGameMode(gameModeEnum);
         }
+
+        //TODO: Load dictionary for the selected game mode
+        // parse the file and make all the words upper case
+        // this is wheere im pulling the giant list
+        // add them as words the dictionary
+
         goToScene("../levelSelector.fxml", (Stage) ((Node) event.getSource()).getScene().getWindow());
     }
 }
