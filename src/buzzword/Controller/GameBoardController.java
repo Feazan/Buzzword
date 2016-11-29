@@ -1,12 +1,11 @@
 package buzzword.Controller;
 
 import buzzword.Model.AppContext;
-import com.sun.org.apache.regexp.internal.CharacterArrayCharacterIterator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
@@ -49,9 +48,12 @@ public class GameBoardController extends Controller {
     Label Boggle15;
     @FXML
     Label Boggle16;
-
+    @FXML
+    TextArea wordCompletedBox;
+    private String selectedWord = "";
     Label lastLabel;
     List<Label> selectedLabels = new ArrayList<Label>();
+    List<String> highlightedWordList = new ArrayList<String>();
     @FXML
     BorderPane theBorderPane;
 
@@ -72,6 +74,7 @@ public class GameBoardController extends Controller {
     public void boggleMouseEntered(MouseEvent event) {
         Label currentLabel;
         currentLabel = (Label) event.getSource();
+        currentLabel.setTextFill(Color.RED);
         if (lastLabel == null || !lastLabel.equals(currentLabel)) {
             selectedLabels.add(currentLabel);
         }
@@ -81,12 +84,33 @@ public class GameBoardController extends Controller {
 
     public void boggleMouseReleased(MouseEvent event) {
         // TODO: Check if the word is allowed
-        String selectedWord = "";
+        //selectedWord = "";
         for (Label selectedLabel : selectedLabels) {
             selectedWord += selectedLabel.getText();
+            selectedLabel.setTextFill(Color.WHITE);
         }
         boolean contains = AppContext.getSingleton().getGameState().getAllowedWords().contains(selectedWord);
-        System.out.printf((contains) ? "Found " + selectedWord : "Not Found: " + selectedWord);
+        if (selectedWord.length() > 2) {
+            highlightedWordList.add(selectedWord);
+            addToTextArea(highlightedWordList);
+            System.out.printf((contains) ? "Found " + selectedWord : "Not Found: " + selectedWord);
+        } else {
+            System.out.println(selectedWord);
+        }
+
+    }
+
+    private void addToTextArea(List<String> listOfWords) {
+        for (int i = 0; i < listOfWords.size(); i++) {
+            wordCompletedBox.setText(listOfWords.get(i));
+        }
+    }
+
+    private boolean alreadySelected(String highlightedWord) {
+        if (highlightedWord.contains(highlightedWord)) {
+            return true;
+        } else
+            return false;
     }
 
     @Override
@@ -96,7 +120,7 @@ public class GameBoardController extends Controller {
         generateGrid(board);
 
         // TODO: Place a random word from the dictionary
-        placeWordInBoard(board, "feazan");
+        placeWordInBoard(board, "BEAR");
 
         // TODO: Set list of all possible words
         AppContext.getSingleton().getGameState().getAllowedWords().clear();
@@ -129,6 +153,7 @@ public class GameBoardController extends Controller {
     }
 
 
+    // THIS IS WHERE I CAN APPLY THE BOARD GENERATOR
     public void generateGrid(Label[][] boggleGrid) {
         final String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         final int N = alphabet.length();
@@ -177,8 +202,7 @@ public class GameBoardController extends Controller {
         }
     }
 
-    public void placeWordInBoard(Label[][] boggleBoard, String wordToPlace)
-    {
+    public void placeWordInBoard(Label[][] boggleBoard, String wordToPlace) {
         int x = (int) (Math.random() * boggleBoard.length);
         int y = (int) (Math.random() * boggleBoard.length);
 
@@ -195,7 +219,7 @@ public class GameBoardController extends Controller {
     }
 
     private List<Position> getPathToPlaceWordInBoardRecursive(Label[][] boggleGrid, String wordToPlace, int index,
-                                                             boolean[][] visitedNode, int i, int j) {
+                                                              boolean[][] visitedNode, int i, int j) {
         if (i < 0 || i >= boggleGrid.length || j < 0 || j >= boggleGrid.length) {
             return null;
         }
@@ -233,6 +257,48 @@ public class GameBoardController extends Controller {
             }
         }
         return null;
+    }
+
+    public void handlePlayButton(ActionEvent event) {
+
+        Button btn = (Button) event.getSource();
+        if (btn.getText().equals("Play")) {
+            Boggle1.setVisible(true);
+            Boggle2.setVisible(true);
+            Boggle3.setVisible(true);
+            Boggle4.setVisible(true);
+            Boggle5.setVisible(true);
+            Boggle6.setVisible(true);
+            Boggle7.setVisible(true);
+            Boggle8.setVisible(true);
+            Boggle9.setVisible(true);
+            Boggle10.setVisible(true);
+            Boggle11.setVisible(true);
+            Boggle12.setVisible(true);
+            Boggle13.setVisible(true);
+            Boggle14.setVisible(true);
+            Boggle15.setVisible(true);
+            Boggle16.setVisible(true);
+            btn.setText("Pause");
+        } else {
+            Boggle1.setVisible(false);
+            Boggle2.setVisible(false);
+            Boggle3.setVisible(false);
+            Boggle4.setVisible(false);
+            Boggle5.setVisible(false);
+            Boggle6.setVisible(false);
+            Boggle7.setVisible(false);
+            Boggle8.setVisible(false);
+            Boggle9.setVisible(false);
+            Boggle10.setVisible(false);
+            Boggle11.setVisible(false);
+            Boggle12.setVisible(false);
+            Boggle13.setVisible(false);
+            Boggle14.setVisible(false);
+            Boggle15.setVisible(false);
+            Boggle16.setVisible(false);
+            btn.setText("Play");
+        }
     }
 
 

@@ -1,6 +1,8 @@
 package buzzword.Model;
 
 import javafx.scene.Scene;
+import javafx.scene.control.Dialog;
+import javafx.stage.*;
 
 /**
  * Created by Feazan on 11/26/2016.
@@ -52,6 +54,7 @@ public class AppContext {
     {
         this.setCurrentUser(null);
     }
+
 
 
 

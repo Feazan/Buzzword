@@ -20,6 +20,7 @@ public class CreateProfileController extends Controller {
     @FXML private TextField createProfileUsername;
     @FXML private TextField createProfilePassword;
     @FXML private TextField createProfileConfirmPassword;
+    @FXML private TextField errorDisplay = new TextField();
 
     @FXML
     public void submitCreateNewProfile(ActionEvent event) throws IOException
@@ -33,29 +34,39 @@ public class CreateProfileController extends Controller {
         if(userName == null || userName.isEmpty())
         {
             //TODO set visibility on incorrect username
+            errorDisplay.setVisible(true);
             System.out.println("make sure username isnt empty");
+            errorDisplay.setText("USERNAME EMPTY");
             return;
         }
         if(password == null || password.isEmpty())
         {
+            errorDisplay.setVisible(true);
             //TODO set visibility on incorrect username
             System.out.println("make sure password isnt empty");
+            errorDisplay.setText("PASSWORD EMPTY");
             return;
         }
         if(confirmPassword == null || confirmPassword.isEmpty())
         {
             //TODO set visibility on incorrect username
+            errorDisplay.setVisible(true);
+            errorDisplay.setText("PASSWORD EMPTY");
             System.out.println("make sure confirm password isnt empty");
             return;
         }
         if (!password.equals(confirmPassword))
         {
+            errorDisplay.setVisible(true);
+            errorDisplay.setText("PASSWORD MUST MATCH");
             //TODO set visibility on password match
             System.out.println("confirm password");
             return;
         }
         if (profileManager.checkIfProfileExists(userName)){
             //TODO set visibility on already exists
+            errorDisplay.setVisible(true);
+            errorDisplay.setText("PROFILE ALREADY EXISTS");
             System.out.println("user profile already exists");
             return;
         }
@@ -67,4 +78,11 @@ public class CreateProfileController extends Controller {
         loginStage.setScene(mainScene);
         loginStage.show();
     }
+
+    @Override
+    public void initialize()
+    {
+        errorDisplay.setVisible(false);
+    }
+
 }

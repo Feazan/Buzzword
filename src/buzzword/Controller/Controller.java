@@ -1,17 +1,20 @@
 package buzzword.Controller;
 
 import buzzword.Model.AppContext;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -91,19 +94,6 @@ public class Controller {
         modeChoices.setItems(gameModeList);
     }
 
-    public void handlePlayButton (ActionEvent event)
-    {
-        Button btn = (Button) event.getSource();
-        if(btn.getText().equals("Play"))
-        {
-            btn.setText("Pause");
-        }
-        else
-        {
-            btn.setText("Play");
-        }
-    }
-
     public void play(ActionEvent event) throws IOException
     {
         System.out.println("Playing Pressed");
@@ -115,8 +105,28 @@ public class Controller {
     }
 
 
-    public void closeProgram ()
+    public void closeProgram (ActionEvent event)
     {
-        System.exit(0);
+        Button yes = new Button();
+        Button no = new Button();
+        Button btn = (Button)event.getSource();
+        btn.setOnAction(
+                event1 -> {
+                    Stage stageTheLabelBelongs = (Stage) btn.getScene().getWindow();
+                    final Stage dialog = new Stage();
+                    dialog.initModality(Modality.APPLICATION_MODAL);
+                    dialog.initOwner(stageTheLabelBelongs);
+                    VBox dialogVbox = new VBox(10);
+                    dialogVbox.getChildren().add(yes);
+                    dialogVbox.getChildren().add(no);
+                    dialogVbox.getChildren().add(new Text("Are you sure you want to exit?"));
+                    Scene dialogScene = new Scene(dialogVbox, 300, 200);
+                    dialog.setScene(dialogScene);
+                    dialog.show();
+                    yes.setText("YES");
+                    no.setText("NO");
+                    yes.setOnAction(even-> Platform.exit());
+                    no.setOnAction(even-> dialog.close());
+                });
     }
 }

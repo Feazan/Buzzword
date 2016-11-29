@@ -23,6 +23,7 @@
                     </FlowPane.margin>
                 </PasswordField>
                 <Button fx:id="createBtn" mnemonicParsing="false" onAction="#submitCreateNewProfile" style="-fx-background-color: #5B5393;" text="Create" textFill="#c6bfff" />
+            <TextField fx:id="errorDisplay" layoutX="20.0" layoutY="210.0" />
             </children>
             <padding>
                 <Insets left="10.0" top="200.0" />
