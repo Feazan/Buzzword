@@ -8,7 +8,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -20,7 +22,7 @@ public class CreateProfileController extends Controller {
     @FXML private TextField createProfileUsername;
     @FXML private TextField createProfilePassword;
     @FXML private TextField createProfileConfirmPassword;
-    @FXML private TextField errorDisplay = new TextField();
+    @FXML private Label errorDisplay = new Label();
 
     @FXML
     public void submitCreateNewProfile(ActionEvent event) throws IOException
@@ -36,7 +38,8 @@ public class CreateProfileController extends Controller {
             //TODO set visibility on incorrect username
             errorDisplay.setVisible(true);
             System.out.println("make sure username isnt empty");
-            errorDisplay.setText("USERNAME EMPTY");
+            errorDisplay.setTextFill(Color.RED);
+            errorDisplay.setText("USERNAME FIELD EMPTY");
             return;
         }
         if(password == null || password.isEmpty())
@@ -44,20 +47,23 @@ public class CreateProfileController extends Controller {
             errorDisplay.setVisible(true);
             //TODO set visibility on incorrect username
             System.out.println("make sure password isnt empty");
-            errorDisplay.setText("PASSWORD EMPTY");
+            errorDisplay.setTextFill(Color.RED);
+            errorDisplay.setText("PASSWORD FIELD EMPTY");
             return;
         }
         if(confirmPassword == null || confirmPassword.isEmpty())
         {
             //TODO set visibility on incorrect username
             errorDisplay.setVisible(true);
-            errorDisplay.setText("PASSWORD EMPTY");
+            errorDisplay.setTextFill(Color.RED);
+            errorDisplay.setText("PASSWORD FIELD EMPTY");
             System.out.println("make sure confirm password isnt empty");
             return;
         }
         if (!password.equals(confirmPassword))
         {
             errorDisplay.setVisible(true);
+            errorDisplay.setTextFill(Color.RED);
             errorDisplay.setText("PASSWORD MUST MATCH");
             //TODO set visibility on password match
             System.out.println("confirm password");
@@ -66,6 +72,7 @@ public class CreateProfileController extends Controller {
         if (profileManager.checkIfProfileExists(userName)){
             //TODO set visibility on already exists
             errorDisplay.setVisible(true);
+            errorDisplay.setTextFill(Color.RED);
             errorDisplay.setText("PROFILE ALREADY EXISTS");
             System.out.println("user profile already exists");
             return;

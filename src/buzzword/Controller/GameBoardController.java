@@ -9,7 +9,12 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
+import org.apache.commons.collections4.Trie;
+import org.apache.commons.collections4.trie.PatriciaTrie;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.net.URL;
 import java.util.*;
 
 /**
@@ -53,9 +58,11 @@ public class GameBoardController extends Controller {
     private String selectedWord = "";
     Label lastLabel;
     List<Label> selectedLabels = new ArrayList<Label>();
-    List<String> highlightedWordList = new ArrayList<String>();
+    Set<String> highlightedWordList = new HashSet<>();
     @FXML
     BorderPane theBorderPane;
+    Scanner readFile;
+    ArrayList<String> fileData = new ArrayList<>();
 
     Label[][] board;
 
@@ -74,7 +81,7 @@ public class GameBoardController extends Controller {
     public void boggleMouseEntered(MouseEvent event) {
         Label currentLabel;
         currentLabel = (Label) event.getSource();
-        currentLabel.setTextFill(Color.RED);
+        currentLabel.setTextFill(Color.valueOf("#24193E"));
         if (lastLabel == null || !lastLabel.equals(currentLabel)) {
             selectedLabels.add(currentLabel);
         }
@@ -82,27 +89,103 @@ public class GameBoardController extends Controller {
         System.out.println("On Mouse Entered");
     }
 
-    public void boggleMouseReleased(MouseEvent event) {
+    //___________________________________________________________________________________________________
+
+    private boolean wordCheck(String word)
+    {
+        PatriciaTrie theTrie = new PatriciaTrie();
+
+        boolean value = false;
+        //TEMPORARY STRING TO READ IN DATA
+        String tempRead;
+        URL url = getClass().getClassLoader().getResource("3LetterWords.txt");
+        try
+        {
+            //INSTANTIATE URL OBJECT WITH GIVEN FILE NAME
+            if(word.length()==4)
+            {
+                url = getClass().getClassLoader().getResource("4LetterWords.txt");
+            }
+            else if (word.length()==5)
+            {
+                url = getClass().getClassLoader().getResource("5LetterWords.txt");
+            }
+            assert url != null;
+            //URL url  = getClass().getResource("words.txt");
+
+            //INSTANTIATE FILE OBJECT WITH GIVEN URL PATH
+            File urlFile = new File(url.getPath());
+
+            //SET MEMBER VAR. READ FILE AS NEW SCANNER OBJECT WITH CREATED URL
+            readFile = new Scanner(urlFile);
+
+            //LOOP THROUGH FILE UNTIL DOESNT HAVE NEXT
+            while(readFile.hasNext())
+            {
+                //SET TEMP STRING TO NEXT STRING
+                tempRead = readFile.next();
+                String s = tempRead.toUpperCase();
+                //ADD TEMP STRING TO FILE DATA ARRAY LIST OF STRINGS
+                fileData.add(s);
+                if (fileData.contains(word))
+                {
+                    value = true;
+                }
+                else
+                {
+                    value = false;
+                }
+            }
+
+        }
+        //CATCH FILE NOT FOUND EXCEPTION
+        catch(FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            //CLOSE FILE
+            readFile.close();
+        }
+        return value;
+    }
+
+    //________________________________________________________________________________________________________
+
+
+
+
+
+
+
+    public void boggleMouseReleased(MouseEvent event)
+    {
         // TODO: Check if the word is allowed
         //selectedWord = "";
-        for (Label selectedLabel : selectedLabels) {
+        for (Label selectedLabel : selectedLabels)
+        {
             selectedWord += selectedLabel.getText();
             selectedLabel.setTextFill(Color.WHITE);
         }
         boolean contains = AppContext.getSingleton().getGameState().getAllowedWords().contains(selectedWord);
-        if (selectedWord.length() > 2) {
+
+        if (selectedWord.length() > 2 && wordCheck(selectedWord))
+        {
             highlightedWordList.add(selectedWord);
-            addToTextArea(highlightedWordList);
-            System.out.printf((contains) ? "Found " + selectedWord : "Not Found: " + selectedWord);
-        } else {
+            System.out.printf((contains) ? "Found " + selectedWord : "Not Found: " + selectedWord + "\n");
+            System.out.println(highlightedWordList.toString());
+        } else
+        {
             System.out.println(selectedWord);
         }
-
+        addToTextArea(highlightedWordList);
+        selectedWord = "";
     }
 
-    private void addToTextArea(List<String> listOfWords) {
+    private void addToTextArea(Set<String> listOfWords) {
         for (int i = 0; i < listOfWords.size(); i++) {
-            wordCompletedBox.setText(listOfWords.get(i));
+            wordCompletedBox.setText(listOfWords.toString());
         }
     }
 
@@ -120,7 +203,7 @@ public class GameBoardController extends Controller {
         generateGrid(board);
 
         // TODO: Place a random word from the dictionary
-        placeWordInBoard(board, "BEAR");
+        //placeWordInBoard(board, "BEAR");
 
         // TODO: Set list of all possible words
         AppContext.getSingleton().getGameState().getAllowedWords().clear();
@@ -152,16 +235,41 @@ public class GameBoardController extends Controller {
         return generator;
     }
 
+    public static char selectAChar(String s){
+        Random random = new Random();
+        int index = random.nextInt(s.length());
+        return s.charAt(index);
+    }
 
     // THIS IS WHERE I CAN APPLY THE BOARD GENERATOR
     public void generateGrid(Label[][] boggleGrid) {
-        final String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        final int N = alphabet.length();
+        String[] die = new String[16];
+        die[0] = "AAEEGN";
+        die[1] = "ABBJOO";
+        die[2] = "ACHOPS";
+        die[3] = "AFFKPS";
+        die[4] = "AOOTTW";
+        die[5] = "CIMOTU";
+        die[6] = "DEILRX";
+        die[7] = "DELRVY";
+        die[8] = "DISTTY";
+        die[9] = "EEGHNW";
+        die[10] = "EEINSU";
+        die[11] = "EHRTVW";
+        die[12] = "EIOSST";
+        die[13] = "ELRTTY";
+        die[14] = "HIMNUE";
+        die[15] = "HLNNRZ";
+
+        ArrayList<String> boggleDice = new ArrayList<>(Arrays.asList(die));
+        Collections.shuffle(boggleDice);
         Random r = new Random();
 
+        int numOfDices = 0;
         for (int i = 0; i < boggleGrid.length; i++) {
             for (int j = 0; j < boggleGrid[i].length; j++) {
-                boggleGrid[i][j].setText(Character.toString(alphabet.charAt(r.nextInt(N))));
+                boggleGrid[i][j].setText(Character.toString(boggleDice.get(numOfDices).charAt(r.nextInt(boggleDice.get(numOfDices).length()))));
+                numOfDices++;
             }
         }
     }
@@ -202,7 +310,7 @@ public class GameBoardController extends Controller {
         }
     }
 
-    public void placeWordInBoard(Label[][] boggleBoard, String wordToPlace) {
+/*    public void placeWordInBoard(Label[][] boggleBoard, String wordToPlace) {
         int x = (int) (Math.random() * boggleBoard.length);
         int y = (int) (Math.random() * boggleBoard.length);
 
@@ -216,9 +324,9 @@ public class GameBoardController extends Controller {
                 boggleBoard[position.x][position.y].setText(Character.toString(wordToPlace.charAt(i++)));
             }
         }
-    }
+    }*/
 
-    private List<Position> getPathToPlaceWordInBoardRecursive(Label[][] boggleGrid, String wordToPlace, int index,
+/*    private List<Position> getPathToPlaceWordInBoardRecursive(Label[][] boggleGrid, String wordToPlace, int index,
                                                               boolean[][] visitedNode, int i, int j) {
         if (i < 0 || i >= boggleGrid.length || j < 0 || j >= boggleGrid.length) {
             return null;
@@ -257,7 +365,7 @@ public class GameBoardController extends Controller {
             }
         }
         return null;
-    }
+    }*/
 
     public void handlePlayButton(ActionEvent event) {
 

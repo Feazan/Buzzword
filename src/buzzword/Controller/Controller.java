@@ -125,7 +125,7 @@ public class Controller {
                     dialog.show();
                     yes.setText("YES");
                     no.setText("NO");
-                    yes.setOnAction(even-> Platform.exit());
+                    yes.setOnAction(even-> System.exit(0));
                     no.setOnAction(even-> dialog.close());
                 });
     }
