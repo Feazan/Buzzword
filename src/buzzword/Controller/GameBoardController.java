@@ -94,6 +94,7 @@ public class GameBoardController extends Controller {
     private boolean wordCheck(String word)
     {
         PatriciaTrie theTrie = new PatriciaTrie();
+        theTrie.put("Hello", "hello");
 
         boolean value = false;
         //TEMPORARY STRING TO READ IN DATA
