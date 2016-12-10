@@ -95,6 +95,7 @@ public class GameBoardController extends Controller {
     {
         PatriciaTrie theTrie = new PatriciaTrie();
         theTrie.put("Hello", "hello");
+        System.out.println(theTrie.toString());
 
         boolean value = false;
         //TEMPORARY STRING TO READ IN DATA
