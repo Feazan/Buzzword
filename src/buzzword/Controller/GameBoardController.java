@@ -1,17 +1,23 @@
 package buzzword.Controller;
 
 import buzzword.Model.AppContext;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import org.apache.commons.collections4.Trie;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.apache.commons.collections4.trie.PatriciaTrie;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
@@ -54,7 +60,7 @@ public class GameBoardController extends Controller {
     @FXML
     Label Boggle16;
     @FXML
-    TextArea wordCompletedBox;
+    AnchorPane wordCompletedBox;
     private String selectedWord = "";
     Label lastLabel;
     List<Label> selectedLabels = new ArrayList<Label>();
@@ -62,11 +68,23 @@ public class GameBoardController extends Controller {
     @FXML
     BorderPane theBorderPane;
     Scanner readFile;
-    ArrayList<String> fileData = new ArrayList<>();
-
+    PatriciaTrie dictionaryTrie = new PatriciaTrie();
     Label[][] board;
+    @FXML
+    Label playerTotalScore;
+    private int total;
+    @FXML
+    Label timer;
+    private Timeline timeline;
+    private Integer  timeSeconds = 0;
+    private static final Integer STARTTIME = 50;
+    private final Object mutex = ""; // dummy object to induce locks
+    @FXML
+    Button thePlayBTN;
 
-    static class Position {
+
+    static class Position
+    {
         public int x;
         public int y;
     }
@@ -78,11 +96,13 @@ public class GameBoardController extends Controller {
         selectedLabels.clear();
     }
 
-    public void boggleMouseEntered(MouseEvent event) {
+    public void boggleMouseEntered(MouseEvent event)
+    {
         Label currentLabel;
         currentLabel = (Label) event.getSource();
         currentLabel.setTextFill(Color.valueOf("#24193E"));
-        if (lastLabel == null || !lastLabel.equals(currentLabel)) {
+        if (lastLabel == null || !lastLabel.equals(currentLabel))
+        {
             selectedLabels.add(currentLabel);
         }
         lastLabel = currentLabel;
@@ -91,27 +111,15 @@ public class GameBoardController extends Controller {
 
     //___________________________________________________________________________________________________
 
-    private boolean wordCheck(String word)
+    private void addDictionaryToTrie()
     {
-        PatriciaTrie theTrie = new PatriciaTrie();
-        theTrie.put("Hello", "hello");
-        System.out.println(theTrie.toString());
-
-        boolean value = false;
         //TEMPORARY STRING TO READ IN DATA
         String tempRead;
-        URL url = getClass().getClassLoader().getResource("3LetterWords.txt");
         try
         {
             //INSTANTIATE URL OBJECT WITH GIVEN FILE NAME
-            if(word.length()==4)
-            {
-                url = getClass().getClassLoader().getResource("4LetterWords.txt");
-            }
-            else if (word.length()==5)
-            {
-                url = getClass().getClassLoader().getResource("5LetterWords.txt");
-            }
+            URL url = getClass().getClassLoader().getResource("words.txt");
+
             assert url != null;
             //URL url  = getClass().getResource("words.txt");
 
@@ -127,18 +135,10 @@ public class GameBoardController extends Controller {
                 //SET TEMP STRING TO NEXT STRING
                 tempRead = readFile.next();
                 String s = tempRead.toUpperCase();
-                //ADD TEMP STRING TO FILE DATA ARRAY LIST OF STRINGS
-                fileData.add(s);
-                if (fileData.contains(word))
-                {
-                    value = true;
-                }
-                else
-                {
-                    value = false;
-                }
-            }
 
+                //ADD TEMP STRING TO FILE DATA ARRAY LIST OF STRINGS
+                dictionaryTrie.put(s, s);
+            }
         }
         //CATCH FILE NOT FOUND EXCEPTION
         catch(FileNotFoundException e)
@@ -150,16 +150,28 @@ public class GameBoardController extends Controller {
             //CLOSE FILE
             readFile.close();
         }
-        return value;
     }
 
     //________________________________________________________________________________________________________
 
+    // This method checks if the word is a correct word
+    private boolean checkIfProperWord(String word)
+    {
+        if (dictionaryTrie.containsKey(word))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
-
-
-
-
+    private int playerTotal(String playerWord)
+    {
+        total += (playerWord.length() - 2)*10;
+        return total;
+    }
 
     public void boggleMouseReleased(MouseEvent event)
     {
@@ -172,34 +184,36 @@ public class GameBoardController extends Controller {
         }
         boolean contains = AppContext.getSingleton().getGameState().getAllowedWords().contains(selectedWord);
 
-        if (selectedWord.length() > 2 && wordCheck(selectedWord))
+        // NEED TO CHECK
+        if (selectedWord.length() > 2 && checkIfProperWord(selectedWord))
         {
+            Text test = new Text();
+            test.setLayoutX(20.0);
+            test.setLayoutY(30.0*(highlightedWordList.size()+1));
+            if (!alreadySelected(selectedWord))
+            {
+                test.setText(selectedWord + "         " + (selectedWord.length() - 2)*10);
+                wordCompletedBox.getChildren().add(test);
+                playerTotalScore.setText(Integer.toString(playerTotal(selectedWord)));
+            }
             highlightedWordList.add(selectedWord);
-            System.out.printf((contains) ? "Found " + selectedWord : "Not Found: " + selectedWord + "\n");
             System.out.println(highlightedWordList.toString());
         } else
         {
             System.out.println(selectedWord);
         }
-        addToTextArea(highlightedWordList);
         selectedWord = "";
+        nextLevel(total, event);
     }
 
-    private void addToTextArea(Set<String> listOfWords) {
-        for (int i = 0; i < listOfWords.size(); i++) {
-            wordCompletedBox.setText(listOfWords.toString());
-        }
-    }
-
-    private boolean alreadySelected(String highlightedWord) {
-        if (highlightedWord.contains(highlightedWord)) {
-            return true;
-        } else
-            return false;
+    private boolean alreadySelected(String word) {
+        return highlightedWordList.contains(word);
     }
 
     @Override
-    public void initialize() {
+    public void initialize()
+    {
+        addDictionaryToTrie();
         // Board contains the 2d array that has references to the labels
         board = createGrid();
         generateGrid(board);
@@ -213,6 +227,62 @@ public class GameBoardController extends Controller {
         // Loop through each word in app context game state dictionary
         //   call find word in board
         //   if found -> add to allowed words set in game state
+        timer.setText(timeSeconds.toString());
+        //timer.setFont(Font.font("Verdana", FontWeight.BOLD, 40));
+        //timer.setTextFill(Color.BLUEVIOLET);
+
+       // button.setOnAction(buttonEventHandler -> {
+            if (timeline != null)
+                timeline.stop();
+            timeSeconds = STARTTIME;
+
+            timer.setText(timeSeconds.toString());  // updating the timer label every second
+            timeline = new Timeline();                   // setting up the timeline
+            timeline.setCycleCount(Timeline.INDEFINITE); // animation continues until stop() is called
+
+            // A timeline consists of KeyFrames
+            // It uses these KeyFrame objects to represent the different time frames
+            timeline.getKeyFrames().add(
+                    new KeyFrame(Duration.seconds(1),       // each time frame lasts for one second
+                            keyframeEventHandler -> {  // at the end of each frame, this event handler is executed
+                                timer.setText((--timeSeconds).toString());
+                                if (timeSeconds <= 0) {
+                                    synchronized (mutex) {
+                                        timeline.stop();
+                                        setVisability();
+                                        clearGrid(board);
+                                        thePlayBTN.setVisible(false);
+                                        Button OK = new Button();
+                                        final Stage dialog = new Stage();
+                                        dialog.initModality(Modality.APPLICATION_MODAL);
+                                        VBox dialogVbox = new VBox(10);
+                                        dialogVbox.getChildren().add(OK);
+                                        dialogVbox.getChildren().add(new Text("Game Over!"));
+                                        Scene dialogScene = new Scene(dialogVbox, 300, 200);
+                                        dialog.setScene(dialogScene);
+                                        dialog.show();
+                                        OK.setText("OK");
+                                        OK.setOnAction(even-> dialog.close());
+                                        // e.g., add code to disable entering new words
+                                    }
+                                }
+                            }));
+            timeline.playFromStart();
+        //});
+
+    }
+
+    public void handlePlayButton(ActionEvent event) {
+        Button btn = (Button) event.getSource();
+        if (btn.getText().equals("Play")) {
+            timeline.play();
+            setVisability();
+            btn.setText("Pause");
+        } else {
+            timeline.pause();
+            setVisability();
+            btn.setText("Play");
+        }
     }
 
     private Label[][] createGrid() {
@@ -276,7 +346,19 @@ public class GameBoardController extends Controller {
         }
     }
 
-    public boolean wordExistsInBoggleBoard(Label[][] boggleGrid, String wordToCheck) {
+    public void clearGrid(Label[][] boggleGrid) {
+        for (int i = 0; i < boggleGrid.length; i++) {
+            for (int j = 0; j < boggleGrid[i].length; j++) {
+                boggleGrid[i][j].setText(" ");
+            }
+        }
+    }
+
+
+
+
+    public boolean wordExistsInBoggleBoard(Label[][] boggleGrid, String wordToCheck)
+    {
         if (wordToCheck.length() > 16) {
             return false;
         }
@@ -312,7 +394,7 @@ public class GameBoardController extends Controller {
         }
     }
 
-/*    public void placeWordInBoard(Label[][] boggleBoard, String wordToPlace) {
+  /* public void placeWordInBoard(Label[][] boggleBoard, String wordToPlace) {
         int x = (int) (Math.random() * boggleBoard.length);
         int y = (int) (Math.random() * boggleBoard.length);
 
@@ -328,7 +410,7 @@ public class GameBoardController extends Controller {
         }
     }*/
 
-/*    private List<Position> getPathToPlaceWordInBoardRecursive(Label[][] boggleGrid, String wordToPlace, int index,
+    private List<Position> getPathToPlaceWordInBoardRecursive(Label[][] boggleGrid, String wordToPlace, int index,
                                                               boolean[][] visitedNode, int i, int j) {
         if (i < 0 || i >= boggleGrid.length || j < 0 || j >= boggleGrid.length) {
             return null;
@@ -367,30 +449,50 @@ public class GameBoardController extends Controller {
             }
         }
         return null;
-    }*/
+    }
 
-    public void handlePlayButton(ActionEvent event) {
+    private boolean[][] copyVisitedNodes(boolean[][] nodes) {
+        boolean[][] copied = new boolean[nodes.length][nodes.length];
+        for (int i = 0; i < nodes.length; i++) {
+            System.arraycopy(nodes[i], 0, copied[i], 0, nodes[i].length);
+        }
+        return copied;
+    }
 
-        Button btn = (Button) event.getSource();
-        if (btn.getText().equals("Play")) {
-            Boggle1.setVisible(true);
-            Boggle2.setVisible(true);
-            Boggle3.setVisible(true);
-            Boggle4.setVisible(true);
-            Boggle5.setVisible(true);
-            Boggle6.setVisible(true);
-            Boggle7.setVisible(true);
-            Boggle8.setVisible(true);
-            Boggle9.setVisible(true);
-            Boggle10.setVisible(true);
-            Boggle11.setVisible(true);
-            Boggle12.setVisible(true);
-            Boggle13.setVisible(true);
-            Boggle14.setVisible(true);
-            Boggle15.setVisible(true);
-            Boggle16.setVisible(true);
-            btn.setText("Pause");
-        } else {
+    public void nextLevel(int score, MouseEvent event)
+    {
+        if (score == 10)
+        {
+            Label btn = (Label)event.getSource();
+            Stage stageTheLabelBelongs = (Stage) btn.getScene().getWindow();
+            btn.setOnMouseMoved(this::showNewWindow);
+            stageTheLabelBelongs.show();
+        }
+    }
+
+    public void showNewWindow(MouseEvent event)
+    {
+        generateGrid(board);
+        Button OK = new Button();
+        Label btn = (Label)event.getSource();
+        Stage stageTheLabelBelongs = (Stage) btn.getScene().getWindow();
+        final Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(stageTheLabelBelongs);
+        VBox dialogVbox = new VBox(10);
+        dialogVbox.getChildren().add(OK);
+        dialogVbox.getChildren().add(new Text("Congratulations you've completed the level!"));
+        Scene dialogScene = new Scene(dialogVbox, 300, 200);
+        dialog.setScene(dialogScene);
+        dialog.show();
+        OK.setText("OK");
+        OK.setOnAction(even-> dialog.close());
+    }
+
+    public void setVisability()
+    {
+        if(Boggle1.visibleProperty().getValue())
+        {
             Boggle1.setVisible(false);
             Boggle2.setVisible(false);
             Boggle3.setVisible(false);
@@ -407,16 +509,56 @@ public class GameBoardController extends Controller {
             Boggle14.setVisible(false);
             Boggle15.setVisible(false);
             Boggle16.setVisible(false);
-            btn.setText("Play");
+        }
+        else
+        {
+            Boggle1.setVisible(true);
+            Boggle2.setVisible(true);
+            Boggle3.setVisible(true);
+            Boggle4.setVisible(true);
+            Boggle5.setVisible(true);
+            Boggle6.setVisible(true);
+            Boggle7.setVisible(true);
+            Boggle8.setVisible(true);
+            Boggle9.setVisible(true);
+            Boggle10.setVisible(true);
+            Boggle11.setVisible(true);
+            Boggle12.setVisible(true);
+            Boggle13.setVisible(true);
+            Boggle14.setVisible(true);
+            Boggle15.setVisible(true);
+            Boggle16.setVisible(true);
         }
     }
 
-
-    private boolean[][] copyVisitedNodes(boolean[][] nodes) {
-        boolean[][] copied = new boolean[nodes.length][nodes.length];
-        for (int i = 0; i < nodes.length; i++) {
-            System.arraycopy(nodes[i], 0, copied[i], 0, nodes[i].length);
-        }
-        return copied;
+    public void closeGameProgram(ActionEvent event)
+    {
+        timeline.pause();
+        Button yes = new Button();
+        Button no = new Button();
+        Button btn = (Button)event.getSource();
+        btn.setOnAction(
+                event1 -> {
+                    setVisability();
+                    Stage stageTheLabelBelongs = (Stage) btn.getScene().getWindow();
+                    final Stage dialog = new Stage();
+                    dialog.initModality(Modality.APPLICATION_MODAL);
+                    dialog.initOwner(stageTheLabelBelongs);
+                    VBox dialogVbox = new VBox(10);
+                    dialogVbox.getChildren().add(yes);
+                    dialogVbox.getChildren().add(no);
+                    dialogVbox.getChildren().add(new Text("Are you sure you want to exit?"));
+                    Scene dialogScene = new Scene(dialogVbox, 300, 200);
+                    dialog.setScene(dialogScene);
+                    dialog.show();
+                    yes.setText("YES");
+                    no.setText("NO");
+                    yes.setOnAction(even-> System.exit(0));
+                    no.setOnAction(even-> {
+                        timeline.play();
+                        setVisability();
+                        dialog.close();
+                    });
+                });
     }
 }

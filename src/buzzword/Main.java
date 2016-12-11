@@ -1,5 +1,6 @@
 package buzzword;
 
+import buzzword.Controller.GameBoardController;
 import buzzword.Model.AppContext;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -15,11 +16,13 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
+
         Parent root = FXMLLoader.load(getClass().getResource("playing.fxml"));
         primaryStage.setTitle("Buzzword");
         primaryStage.setScene(new Scene(root, 2000, 650));
         primaryStage.setFullScreen(true);
         primaryStage.show();
+
 
         AppContext.getSingleton();
     }
