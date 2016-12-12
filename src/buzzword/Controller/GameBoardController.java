@@ -78,6 +78,8 @@ public class GameBoardController extends Controller {
     @FXML
     Button restartButton;
     LevelSelectorController theLevel = new LevelSelectorController();
+    @FXML
+    Label gameModeInBoard;
 
     static class Position
     {
@@ -196,6 +198,7 @@ public class GameBoardController extends Controller {
                                 }
                             }));
             timeline.playFromStart();
+        gameModeInBoard.setText((AppContext.getSingleton().getGameState().getGameMode().toString()));
     }
 
     // This method checks if the word is a correct word
