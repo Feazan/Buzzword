@@ -47,14 +47,6 @@
                      </font>
                   </TextField>
                   <Button fx:id="thePlayBTN" layoutX="218.0" layoutY="552.0" mnemonicParsing="false" onAction="#handlePlayButton" style="-fx-background-color: #5B5393;" text="Pause" textFill="#c6bfff" />
-                  <TextField layoutX="234.0" layoutY="-13.0" prefHeight="69.0" prefWidth="379.0" style="-fx-background-color: #0E083B; -fx-text-fill: #c6bfff;" text="Game Mode">
-                     <font>
-                        <Font name="Yu Gothic UI Bold" size="36.0" />
-                     </font>
-                     <padding>
-                        <Insets left="150.0" />
-                     </padding>
-                  </TextField>
                   <TextField layoutX="579.0" layoutY="432.0" style="-fx-background-color: #5B5393; -fx-text-fill: #c6bfff;" text="Target: 100" />
                   <Button layoutX="831.0" layoutY="2.0" mnemonicParsing="false" onAction="#closeGameProgram" style="-fx-background-color: #5B5393;" text="X" textFill="#c6bfff" fx:id="xBTN" />
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#5b5393" height="100.0" layoutX="80.0" layoutY="276.0" stroke="BLACK" strokeType="INSIDE" width="100.0" />
@@ -164,6 +156,11 @@
                   <HBox fx:id="borderHBoxBOTTOM" layoutX="74.0" layoutY="474.0" onDragDetected="#boggleMouseReleased" onMouseDragEntered="#boggleMouseReleased" onMousePressed="#boggleMouseReleased" prefHeight="44.0" prefWidth="413.0" />
                   <VBox fx:id="borderHBoxLEFT" layoutX="26.0" layoutY="67.0" onDragDetected="#boggleMouseReleased" onMouseDragEntered="#boggleMouseReleased" onMouseReleased="#boggleMouseReleased" prefHeight="423.0" prefWidth="54.0" />
                   <VBox fx:id="borderHBoxRIGHT" layoutX="474.0" layoutY="67.0" onDragDetected="#boggleMouseReleased" onMouseDragEntered="#boggleMouseReleased" onMouseReleased="#boggleMouseReleased" prefHeight="428.0" prefWidth="62.0" />
+                  <Label fx:id="gameModeInBoard" layoutX="396.0" prefHeight="51.0" prefWidth="198.0" text="Label" textFill="#c6bfff">
+                     <font>
+                        <Font size="48.0" />
+                     </font>
+                  </Label>
                     </children>
                 </Pane>
             </children>
