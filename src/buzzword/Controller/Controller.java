@@ -26,7 +26,7 @@ import java.io.IOException;
 public class Controller {
     @FXML private TextField settingUser;
     @FXML public ChoiceBox modeChoices = new ChoiceBox();
-    ObservableList<String> gameModeList = FXCollections.observableArrayList("Animals", "English Dictionary", "Sports Teams");
+    ObservableList<String> gameModeList = FXCollections.observableArrayList("English", "Spanish", "Italian");
 
     protected void goToScene(String sceneToLoad, Stage currentStage) throws IOException
     {
@@ -80,7 +80,7 @@ public class Controller {
     public void returnToHome (ActionEvent event) throws IOException
     {
         System.out.println("Returning to Home");
-        Parent gameScreen = FXMLLoader.load(getClass().getResource("../sample.fxml"));
+        Parent gameScreen = FXMLLoader.load(getClass().getResource("../modeSelector.fxml"));
         Scene mainScene = new Scene(gameScreen);
         Stage loginStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         loginStage.setScene(mainScene);
@@ -90,7 +90,7 @@ public class Controller {
     @FXML
     public void initialize()
     {
-        modeChoices.setValue("Animals");
+        modeChoices.setValue("English");
         modeChoices.setItems(gameModeList);
     }
 

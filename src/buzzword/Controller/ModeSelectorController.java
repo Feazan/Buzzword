@@ -25,20 +25,20 @@ public class ModeSelectorController extends Controller {
         AppContext.getSingleton().getGameState().getDictionary().clear();
 
         GameModeEnum gameModeEnum;
-        if(modeChoices.getValue().equals("Animals"))
+        if(modeChoices.getValue().equals("English"))
         {
-            gameModeEnum = GameModeEnum.ANIMAL;
+            gameModeEnum = GameModeEnum.ENGLISH;
             AppContext.getSingleton().getGameState().setGameMode(gameModeEnum);
 
         }
-        else if(modeChoices.getValue().equals("English Dictionary"))
+        else if(modeChoices.getValue().equals("Spanish"))
         {
-            gameModeEnum = GameModeEnum.DICTIONARY;
+            gameModeEnum = GameModeEnum.SPANISH;
             AppContext.getSingleton().getGameState().setGameMode(gameModeEnum);
         }
         else
         {
-            gameModeEnum = GameModeEnum.SPORTSTEAMS;
+            gameModeEnum = GameModeEnum.ITALIAN;
             AppContext.getSingleton().getGameState().setGameMode(gameModeEnum);
         }
 

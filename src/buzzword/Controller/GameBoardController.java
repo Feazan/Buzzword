@@ -17,10 +17,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import org.apache.commons.collections4.trie.PatriciaTrie;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.net.URL;
 import java.util.*;
 
 /**
@@ -67,8 +63,6 @@ public class GameBoardController extends Controller {
     Set<String> highlightedWordList = new HashSet<>();
     @FXML
     BorderPane theBorderPane;
-    Scanner readFile;
-    PatriciaTrie dictionaryTrie = new PatriciaTrie();
     Label[][] board;
     @FXML
     Label playerTotalScore;
@@ -81,7 +75,9 @@ public class GameBoardController extends Controller {
     private final Object mutex = ""; // dummy object to induce locks
     @FXML
     Button thePlayBTN;
-
+    @FXML
+    Button restartButton;
+    LevelSelectorController theLevel = new LevelSelectorController();
 
     static class Position
     {
@@ -109,63 +105,6 @@ public class GameBoardController extends Controller {
         System.out.println("On Mouse Entered");
     }
 
-    //___________________________________________________________________________________________________
-
-    private void addDictionaryToTrie()
-    {
-        //TEMPORARY STRING TO READ IN DATA
-        String tempRead;
-        try
-        {
-            //INSTANTIATE URL OBJECT WITH GIVEN FILE NAME
-            URL url = getClass().getClassLoader().getResource("words.txt");
-
-            assert url != null;
-            //URL url  = getClass().getResource("words.txt");
-
-            //INSTANTIATE FILE OBJECT WITH GIVEN URL PATH
-            File urlFile = new File(url.getPath());
-
-            //SET MEMBER VAR. READ FILE AS NEW SCANNER OBJECT WITH CREATED URL
-            readFile = new Scanner(urlFile);
-
-            //LOOP THROUGH FILE UNTIL DOESNT HAVE NEXT
-            while(readFile.hasNext())
-            {
-                //SET TEMP STRING TO NEXT STRING
-                tempRead = readFile.next();
-                String s = tempRead.toUpperCase();
-
-                //ADD TEMP STRING TO FILE DATA ARRAY LIST OF STRINGS
-                dictionaryTrie.put(s, s);
-            }
-        }
-        //CATCH FILE NOT FOUND EXCEPTION
-        catch(FileNotFoundException e)
-        {
-            e.printStackTrace();
-        }
-        finally
-        {
-            //CLOSE FILE
-            readFile.close();
-        }
-    }
-
-    //________________________________________________________________________________________________________
-
-    // This method checks if the word is a correct word
-    private boolean checkIfProperWord(String word)
-    {
-        if (dictionaryTrie.containsKey(word))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
 
     private int playerTotal(String playerWord)
     {
@@ -213,25 +152,14 @@ public class GameBoardController extends Controller {
     @Override
     public void initialize()
     {
-        addDictionaryToTrie();
+        theLevel.addDictionaryToTrie((AppContext.getSingleton().getGameState().getGameMode().toString()));
         // Board contains the 2d array that has references to the labels
         board = createGrid();
-        generateGrid(board);
+        generateGrid(board, (AppContext.getSingleton().getGameState().getGameMode().toString()));
 
-        // TODO: Place a random word from the dictionary
-        //placeWordInBoard(board, "BEAR");
 
-        // TODO: Set list of all possible words
         AppContext.getSingleton().getGameState().getAllowedWords().clear();
-
-        // Loop through each word in app context game state dictionary
-        //   call find word in board
-        //   if found -> add to allowed words set in game state
         timer.setText(timeSeconds.toString());
-        //timer.setFont(Font.font("Verdana", FontWeight.BOLD, 40));
-        //timer.setTextFill(Color.BLUEVIOLET);
-
-       // button.setOnAction(buttonEventHandler -> {
             if (timeline != null)
                 timeline.stop();
             timeSeconds = STARTTIME;
@@ -249,6 +177,7 @@ public class GameBoardController extends Controller {
                                 if (timeSeconds <= 0) {
                                     synchronized (mutex) {
                                         timeline.stop();
+                                        // e.g., add code to disable entering new words
                                         setVisability();
                                         clearGrid(board);
                                         thePlayBTN.setVisible(false);
@@ -263,14 +192,25 @@ public class GameBoardController extends Controller {
                                         dialog.show();
                                         OK.setText("OK");
                                         OK.setOnAction(even-> dialog.close());
-                                        // e.g., add code to disable entering new words
                                     }
                                 }
                             }));
             timeline.playFromStart();
-        //});
-
     }
+
+    // This method checks if the word is a correct word
+    private boolean checkIfProperWord(String word)
+    {
+        if (theLevel.dictionaryTrie.containsKey(word))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
 
     public void handlePlayButton(ActionEvent event) {
         Button btn = (Button) event.getSource();
@@ -314,24 +254,64 @@ public class GameBoardController extends Controller {
     }
 
     // THIS IS WHERE I CAN APPLY THE BOARD GENERATOR
-    public void generateGrid(Label[][] boggleGrid) {
+    public void generateGrid(Label[][] boggleGrid, String gameMode) {
         String[] die = new String[16];
-        die[0] = "AAEEGN";
-        die[1] = "ABBJOO";
-        die[2] = "ACHOPS";
-        die[3] = "AFFKPS";
-        die[4] = "AOOTTW";
-        die[5] = "CIMOTU";
-        die[6] = "DEILRX";
-        die[7] = "DELRVY";
-        die[8] = "DISTTY";
-        die[9] = "EEGHNW";
-        die[10] = "EEINSU";
-        die[11] = "EHRTVW";
-        die[12] = "EIOSST";
-        die[13] = "ELRTTY";
-        die[14] = "HIMNUE";
-        die[15] = "HLNNRZ";
+        if(gameMode.equals("ENGLISH")) {
+            die[0] = "AAEEGN";
+            die[1] = "ABBJOO";
+            die[2] = "ACHOPS";
+            die[3] = "AFFKPS";
+            die[4] = "AOOTTW";
+            die[5] = "CIMOTU";
+            die[6] = "DEILRX";
+            die[7] = "DELRVY";
+            die[8] = "DISTTY";
+            die[9] = "EEGHNW";
+            die[10] = "EEINSU";
+            die[11] = "EHRTVW";
+            die[12] = "EIOSST";
+            die[13] = "ELRTTY";
+            die[14] = "HIMNUE";
+            die[15] = "HLNNRZ";
+        }
+        else if (gameMode.equals("SPANISH"))
+        {
+            die[0] = "QBZJXL";
+            die[1] = "TOUOTO";
+            die[2] = "OVCRGR";
+            die[3] = "AAAFSR";
+            die[4] = "AUMEEO";
+            die[5] = "EHLRDO";
+            die[6] = "NHDTHO";
+            die[7] = "LHNROD";
+            die[8] = "ADAISR";
+            die[9] = "UIFASR";
+            die[10] = "TELPCI";
+            die[11] = "SSNSEU";
+            die[12] = "RIYPRH";
+            die[13] = "DORDLN";
+            die[14] = "CCÑNST";
+            die[15] = "UOTOÑN";
+        }
+        else if(gameMode.equals("ITALIAN"))
+        {
+            die[0] = "AAEIOT";
+            die[1] = "ACFIOR";
+            die[2] = "EEFHIS";
+            die[3] = "ELPSTU";
+            die[4] = "AFGIPR";
+            die[5] = "ABILRT";
+            die[6] = "ADENVZ";
+            die[7] = "EGINTV";
+            die[8] = "ABCIMO";
+            die[9] = "BEFLNO";
+            die[10] = "ABMOOE";
+            die[11] = "AIMORS";
+            die[12] = "EGLNOU";
+            die[13] = "CDILMO";
+            die[14] = "ACDEMP";
+            die[15] = "CENOTU";
+        }
 
         ArrayList<String> boggleDice = new ArrayList<>(Arrays.asList(die));
         Collections.shuffle(boggleDice);
@@ -353,6 +333,8 @@ public class GameBoardController extends Controller {
             }
         }
     }
+
+
 
 
 
@@ -461,7 +443,7 @@ public class GameBoardController extends Controller {
 
     public void nextLevel(int score, MouseEvent event)
     {
-        if (score == 10)
+        if (score == 100)
         {
             Label btn = (Label)event.getSource();
             Stage stageTheLabelBelongs = (Stage) btn.getScene().getWindow();
@@ -469,10 +451,17 @@ public class GameBoardController extends Controller {
             stageTheLabelBelongs.show();
         }
     }
+    public void restart(ActionEvent event)
+    {
+        System.out.println("restart pressed");
+        Duration time = new Duration(60000);
+    }
+
+
 
     public void showNewWindow(MouseEvent event)
     {
-        generateGrid(board);
+        generateGrid(board, (AppContext.getSingleton().getGameState().getGameMode().toString()));
         Button OK = new Button();
         Label btn = (Label)event.getSource();
         Stage stageTheLabelBelongs = (Stage) btn.getScene().getWindow();

@@ -8,7 +8,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
@@ -19,9 +21,10 @@
                 <Insets left="10.0" top="200.0" />
             </padding>
          <children>
-            <Button mnemonicParsing="false" onAction="#handleLogout" text="Logout" />
+            <Button mnemonicParsing="false" onAction="#handleLogout" style="-fx-background-color: #5B5393;" text="Logout" textFill="#c6bfff" />
             <TextField prefHeight="39.0" prefWidth="193.0" />
             <Button fx:id="homeBTN" mnemonicParsing="false" onAction="#returnToHome" prefHeight="40.0" prefWidth="73.0" style="-fx-background-color: #5B5393;" text="Home" textFill="#c6bfff" />
+            <Button fx:id="restartButton" mnemonicParsing="false" onAction="#restart" style="-fx-background-color: #5B5393;" text="Restart" textFill="#c6bfff" />
          </children>
         </FlowPane>
     </left>
@@ -157,6 +160,10 @@
                      <font>
                         <Font size="24.0" />
                      </font></Label>
+                  <HBox fx:id="borderHBoxTop" layoutX="66.0" layoutY="41.0" onDragDetected="#boggleMouseReleased" onMouseDragEntered="#boggleMouseReleased" onMouseReleased="#boggleMouseReleased" prefHeight="38.0" prefWidth="429.0" />
+                  <HBox fx:id="borderHBoxBOTTOM" layoutX="74.0" layoutY="474.0" onDragDetected="#boggleMouseReleased" onMouseDragEntered="#boggleMouseReleased" onMousePressed="#boggleMouseReleased" prefHeight="44.0" prefWidth="413.0" />
+                  <VBox fx:id="borderHBoxLEFT" layoutX="26.0" layoutY="67.0" onDragDetected="#boggleMouseReleased" onMouseDragEntered="#boggleMouseReleased" onMouseReleased="#boggleMouseReleased" prefHeight="423.0" prefWidth="54.0" />
+                  <VBox fx:id="borderHBoxRIGHT" layoutX="474.0" layoutY="67.0" onDragDetected="#boggleMouseReleased" onMouseDragEntered="#boggleMouseReleased" onMouseReleased="#boggleMouseReleased" prefHeight="428.0" prefWidth="62.0" />
                     </children>
                 </Pane>
             </children>

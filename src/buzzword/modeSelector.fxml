@@ -16,7 +16,7 @@
     <left>
         <FlowPane columnHalignment="CENTER" hgap="20.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #3A3276;" vgap="50.0" BorderPane.alignment="CENTER">
             <children>
-            <Button mnemonicParsing="false" onAction="#handleLogout" text="Logout" />
+            <Button mnemonicParsing="false" onAction="#handleLogout" style="-fx-background-color: #5B5393;" text="Logout" textFill="#c6bfff" />
             <TextField fx:id="settingUser" />
             <Label text="Mode:" textFill="#c6bfff" />
             <ChoiceBox fx:id="modeChoices" prefWidth="150.0">
