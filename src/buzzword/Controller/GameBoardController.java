@@ -71,7 +71,7 @@ public class GameBoardController extends Controller {
     Label timer;
     private Timeline timeline;
     private Integer  timeSeconds = 0;
-    private static final Integer STARTTIME = 50;
+    private static final Integer STARTTIME = 60;
     private final Object mutex = ""; // dummy object to induce locks
     @FXML
     Button thePlayBTN;
@@ -204,14 +204,7 @@ public class GameBoardController extends Controller {
     // This method checks if the word is a correct word
     private boolean checkIfProperWord(String word)
     {
-        if (theLevel.dictionaryTrie.containsKey(word))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return theLevel.dictionaryTrie.containsKey(word);
     }
 
 
@@ -321,12 +314,13 @@ public class GameBoardController extends Controller {
         Random r = new Random();
 
         int numOfDices = 0;
-        for (int i = 0; i < boggleGrid.length; i++) {
+       for (int i = 0; i < boggleGrid.length; i++) {
             for (int j = 0; j < boggleGrid[i].length; j++) {
                 boggleGrid[i][j].setText(Character.toString(boggleDice.get(numOfDices).charAt(r.nextInt(boggleDice.get(numOfDices).length()))));
                 numOfDices++;
             }
         }
+
     }
 
     public void clearGrid(Label[][] boggleGrid) {
@@ -379,7 +373,7 @@ public class GameBoardController extends Controller {
         }
     }
 
-  /* public void placeWordInBoard(Label[][] boggleBoard, String wordToPlace) {
+   public void placeWordInBoard(Label[][] boggleBoard, String wordToPlace) {
         int x = (int) (Math.random() * boggleBoard.length);
         int y = (int) (Math.random() * boggleBoard.length);
 
@@ -393,7 +387,7 @@ public class GameBoardController extends Controller {
                 boggleBoard[position.x][position.y].setText(Character.toString(wordToPlace.charAt(i++)));
             }
         }
-    }*/
+    }
 
     private List<Position> getPathToPlaceWordInBoardRecursive(Label[][] boggleGrid, String wordToPlace, int index,
                                                               boolean[][] visitedNode, int i, int j) {
@@ -464,6 +458,7 @@ public class GameBoardController extends Controller {
 
     public void showNewWindow(MouseEvent event)
     {
+        timeline.pause();
         generateGrid(board, (AppContext.getSingleton().getGameState().getGameMode().toString()));
         Button OK = new Button();
         Label btn = (Label)event.getSource();
@@ -478,7 +473,10 @@ public class GameBoardController extends Controller {
         dialog.setScene(dialogScene);
         dialog.show();
         OK.setText("OK");
-        OK.setOnAction(even-> dialog.close());
+        OK.setOnAction(even-> {
+            timeline.playFromStart();
+            dialog.close();
+        });
     }
 
     public void setVisability()
